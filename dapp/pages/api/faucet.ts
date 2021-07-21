@@ -1,6 +1,6 @@
 import type { TransactionResponse } from '../types'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { withApiAuthRequired } from '@auth0/nextjs-auth0';
+import { getSession } from "next-auth/client"
 import { ethers } from 'ethers';
 
 import artifact from '../../contracts/Faucet.json';
@@ -14,10 +14,17 @@ const provider = new ethers.providers.JsonRpcProvider();
 const wallet = new ethers.Wallet(privateKey, provider);
 const faucet = new ethers.Contract(faucetAddress, artifact.abi, wallet);
 
-export default withApiAuthRequired(async function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<TransactionResponse>
 ) {
+
+  const session = await getSession({ req })
+
+  if(!session) {
+    res.status(401);
+    return;
+  }
 
   if(!req.body.address) {
     res.status(400);
@@ -29,4 +36,4 @@ export default withApiAuthRequired(async function handler(
   });
 
   res.status(200).json({ successful: true })
-});
+};

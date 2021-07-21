@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { UserProfile } from '@auth0/nextjs-auth0';
+import { useSession } from 'next-auth/client'
 import { submitTransaction } from '../../scripts/faucet-client';
 
-export function TokenForm({user}: {user : UserProfile}) {
+import type {DefaultSession} from 'next-auth'
+
+export function TokenForm(prop: {session: DefaultSession}) {
   const [address, setAddress] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
@@ -20,7 +22,7 @@ export function TokenForm({user}: {user : UserProfile}) {
   return ( 
     <div>
     <p className="mt-3 text-2xl">
-      Welcome {user.name}
+      Welcome {prop.session?.user?.name}
     </p>
     <p className="mt-3 text-2xl">
     Your address

@@ -1,14 +1,14 @@
 import 'tailwindcss/tailwind.css'
 
 import type { AppProps } from 'next/app'
-import { UserProvider } from '@auth0/nextjs-auth0';
+import { Provider } from 'next-auth/client'
 
 function MyApp({ Component, pageProps }: AppProps) {
   
   return (
-    <UserProvider>
+    <Provider session={pageProps.session}>
       <Component {...pageProps} />
-    </UserProvider>
+    </Provider>
   );
 }
 export default MyApp

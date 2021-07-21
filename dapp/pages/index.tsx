@@ -1,15 +1,13 @@
 import Head from 'next/head'
 import { TokenForm } from './components/TokenForm';
-import { useUser } from '@auth0/nextjs-auth0';
+import { signIn, signOut, useSession } from 'next-auth/client'
 
 export default function Home() {
   
-  const { user, error, isLoading } = useUser();
-
-  if (isLoading) return <div>Loading...</div>;
+  const [ session ] = useSession()
+    
+  console.log(session);
   
-  if (error) return <div>{error.message}</div>;
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <Head>
@@ -23,12 +21,12 @@ export default function Home() {
         You can use this Faucet to request Cibrax tokens
       </p>
         
-      {user && <TokenForm user={user}/>}
+      {session && <TokenForm session={session}/>}
 
       <p className="mt-3 text-2xl">
-        {(user) ? 
-          <a href="/api/auth/logout" className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Logout</a> : 
-          <a href="/api/auth/login" className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Login</a>
+        {(session) ? 
+          <button onClick={() => signOut()} className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Logout</button> : 
+          <button onClick={() => signIn()} className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Login</button>
         }
 
     </p>  
