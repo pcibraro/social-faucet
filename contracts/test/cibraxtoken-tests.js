@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 
-describe("Auth0Token", function () {
+describe("CibraxToken", function () {
     
     let owner, addr1, addr2, addr3, addr4, addr5;
     let CibraxToken, cibraxToken;
